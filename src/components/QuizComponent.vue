@@ -1,29 +1,44 @@
 <template>
+  <div class="row my-2">
+    <div class="col-12 d-flex justify-content-center">
+      <div class="card shadow p-1">
+        <p class="m-0">{{correctAnswers}}/17 Correct</p>
+        <p class="m-0"><span v-if="(17 - notes.length) !== 0">{{Math.round((correctAnswers/(17 - notes.length)) * 100)}}</span><span v-else>--</span>%</p>
+      </div>
+    </div>
+  </div>
   <div class="w-100 h-100 d-flex justify-content-around align-items-center" v-if="studyMethod == 'Tab to Note'">
     <div class="card">test</div>
     <div class="card">test</div>
   </div>
-  <div class="row mt-5" v-if="studyMethod == 'Note to Tab'">
-    <div class="col-6">
-      <div class="d-flex justify-content-end" id="staff"></div>
+  <div class="row mt-5" v-if="studyMethod == 'Note to Tab' && notes.length !== 0">
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+      <div class="d-flex justify-content-end shadow" id="staff"></div>
     </div>
-    <div class="col-6 d-flex align-items-center justify-content-center">
-      <div class="card p-2">
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+      <div class="card shadow p-2">
         <div class="py-1">
-          <span>G |--<input type="text" class="w-25">--</span>
+          <span>G |--<input type="number" class="w-25" v-model="Ginput">--</span>
         </div>
         <div class="py-1">
-          <span>D |--<input type="text" class="w-25">--</span>
+          <span>D |--<input type="number" class="w-25" v-model="Dinput">--</span>
         </div>
         <div class="py-1">
-          <span>A |--<input type="text" class="w-25">--</span>
+          <span>A |--<input type="number" class="w-25" v-model="Ainput">--</span>
         </div>
         <div class="py-1">
-          <span>E |--<input type="text" class="w-25">--</span>
+          <span>E |--<input type="number" class="w-25" v-model="Einput">--</span>
         </div>
         <div class="d-flex justify-content-center pt-2">
-          <button class="btn-sm btn-primary">Submit</button>
+          <button class="btn-sm btn-primary" @click="submitAnswer()">Submit</button>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" v-if="notes.length === 0">
+    <div class="col-12 d-flex justify-content-center">
+      <div class="card p-2">
+        <p class="m-0">done!</p>
       </div>
     </div>
   </div>
@@ -42,30 +57,113 @@ export default {
   },
   data () {
     return {
-      notes: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+      Ginput: null,
+      Gnotes: ['G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F'],
+      Dinput: null,
+      Dnotes: ['D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C'],
+      Ainput: null,
+      Anotes: ['A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G'],
+      Einput: null,
+      Enotes: ['E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D'],
+      answer: '',
+
+      notes: ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'],
+      correctAnswers: 0,
       VF: Vex.Flow,
       context: null,
       stave: null
     }
   },
   methods: {
+    submitAnswer () {
+      let correct = true
+      if (this.Ginput !== null) {
+        const noteInput = this.Gnotes[this.Ginput]
+        if (noteInput.includes('/')) {
+          if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
+            correct = false
+          }
+        } else {
+          if (noteInput !== this.answer) {
+            correct = false
+          }
+        }
+      }
+      if (this.Dinput !== null) {
+        const noteInput = this.Dnotes[this.Dinput]
+        if (noteInput.includes('/')) {
+          if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
+            correct = false
+          }
+        } else {
+          if (noteInput !== this.answer) {
+            correct = false
+          }
+        }
+      }
+      if (this.Ainput !== null) {
+        const noteInput = this.Anotes[this.Ainput]
+        if (noteInput.includes('/')) {
+          if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
+            correct = false
+          }
+        } else {
+          if (noteInput !== this.answer) {
+            correct = false
+          }
+        }
+      }
+      if (this.Einput !== null) {
+        const noteInput = this.Enotes[this.Einput]
+        if (noteInput.includes('/')) {
+          if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
+            correct = false
+          }
+        } else {
+          if (noteInput !== this.answer) {
+            correct = false
+          }
+        }
+      }
+      if (this.Einput === null && this.Ainput === null && this.Dinput === null && this.Ginput === null) {
+        correct = false
+      }
+      if (correct === true) {
+        this.correctAnswers++
+      }
+      this.nextNote()
+    },
     nextNote () {
-      const note = this.notes[Math.floor(Math.random() * (this.notes.length))]
-      const accidental = ['', '#', 'b'][Math.floor(Math.random() * (2 + 1))]
+      this.notes = this.notes.filter(n => n !== this.answer)
+      if (this.notes.length === 0) {
+        return
+      }
+      this.reset()
+      this.answer = this.notes[Math.floor(Math.random() * (this.notes.length))]
       var vf = new Vex.Flow.Factory({ renderer: { elementId: 'staff' } })
       var score = vf.EasyScore()
       var system = vf.System()
       system.addStave({
-        voices: [score.voice(score.notes(`${note}${accidental}4/w`))]
+        voices: [score.voice(score.notes(`${this.answer}4/w`))]
       }).addClef('treble').addTimeSignature('4/4')
       vf.draw()
+    },
+    reset () {
+      this.Ginput = null
+      this.Dinput = null
+      this.Ainput = null
+      this.Einput = null
+      const staff = document.getElementById('staff')
+      while (staff.hasChildNodes()) {
+        staff.removeChild(staff.lastChild)
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.card {
-
+#staff {
+  width: 8em;
 }
 </style>
