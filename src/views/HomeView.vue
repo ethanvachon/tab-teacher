@@ -6,7 +6,7 @@
         <option value="Tab to Note">Tab to Note</option>
       </select>
   </nav>
-  <div class="height">
+  <div class="container height">
     <QuizComponent :studyMethod="studyMethod"/>
   </div>
 </template>
