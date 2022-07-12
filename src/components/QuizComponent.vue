@@ -1,9 +1,10 @@
 <template>
-  <div class="row my-2">
+  <div class="row my-2" v-if="notes.length !== 0">
     <div class="col-12 d-flex justify-content-center">
-      <div class="card shadow p-1">
-        <p class="m-0">{{correctAnswers}}/17 Correct</p>
-        <p class="m-0"><span v-if="(17 - notes.length) !== 0">{{Math.round((correctAnswers/(17 - notes.length)) * 100)}}</span><span v-else>--</span>%</p>
+      <div class="card shadow py-2 px-4 mt-2">
+        <h5 class="m-0">{{correctAnswers}}/17 Correct</h5>
+        <h5 class="m-0"><span v-if="(17 - notes.length) !== 0">{{Math.round((correctAnswers/(17 - notes.length)) * 100)}}</span><span v-else>--</span>%</h5>
+        <button class="btn-sm btn-primary mt-2" @click="hardReset()">Reset</button>
       </div>
     </div>
   </div>
@@ -30,15 +31,20 @@
           <span>E |--<input type="number" class="w-25" v-model="Einput">--</span>
         </div>
         <div class="d-flex justify-content-center pt-2">
-          <button class="btn-sm btn-primary" @click="submitAnswer()">Submit</button>
+          <button class="btn-sm btn-success" @click="submitAnswer()">Submit</button>
         </div>
       </div>
     </div>
   </div>
   <div class="row" v-if="notes.length === 0">
     <div class="col-12 d-flex justify-content-center">
-      <div class="card p-2">
-        <p class="m-0">done!</p>
+      <div class="card shadow p-2 mt-3">
+        <h4 v-if="correctAnswers == 17">Perfect! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
+        <h4 v-if="correctAnswers >= 14 && correctAnswers != 17">Congrats! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
+        <h4 v-if="correctAnswers >= 9 || correctAnswers < 14">Not bad! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
+        <h4 v-if="correctAnswers < 9">Try again! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
+        <h5 class="m-0">{{correctAnswers}}/17 Correct</h5>
+        <button class="btn-sm btn-primary mt-3" @click="hardReset()">Reset</button>
       </div>
     </div>
   </div>
@@ -157,6 +163,13 @@ export default {
       while (staff.hasChildNodes()) {
         staff.removeChild(staff.lastChild)
       }
+    },
+    hardReset () {
+      this.notes = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
+      this.answer = ''
+      this.correctAnswers = 0
+      this.reset()
+      this.nextNote()
     }
   }
 }
