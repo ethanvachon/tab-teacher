@@ -41,7 +41,7 @@
       <div class="card shadow p-2 mt-3">
         <h4 v-if="correctAnswers == 17">Perfect! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
         <h4 v-if="correctAnswers >= 14 && correctAnswers != 17">Congrats! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
-        <h4 v-if="correctAnswers >= 9 || correctAnswers < 14">Not bad! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
+        <h4 v-if="correctAnswers >= 9 && correctAnswers < 14">Not bad! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
         <h4 v-if="correctAnswers < 9">Try again! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
         <h5 class="m-0">{{correctAnswers}}/17 Correct</h5>
         <button class="btn-sm btn-primary mt-3" @click="hardReset()">Reset</button>
@@ -83,7 +83,7 @@ export default {
   methods: {
     submitAnswer () {
       let correct = true
-      if (this.Ginput !== null) {
+      if (this.Ginput !== null && this.Ginput !== '') {
         const noteInput = this.Gnotes[this.Ginput]
         if (noteInput.includes('/')) {
           if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
@@ -95,7 +95,7 @@ export default {
           }
         }
       }
-      if (this.Dinput !== null) {
+      if (this.Dinput !== null && this.Dinput !== '') {
         const noteInput = this.Dnotes[this.Dinput]
         if (noteInput.includes('/')) {
           if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
@@ -107,7 +107,7 @@ export default {
           }
         }
       }
-      if (this.Ainput !== null) {
+      if (this.Ainput !== null && this.Ainput !== '') {
         const noteInput = this.Anotes[this.Ainput]
         if (noteInput.includes('/')) {
           if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
@@ -119,7 +119,7 @@ export default {
           }
         }
       }
-      if (this.Einput !== null) {
+      if (this.Einput !== null && this.Einput !== '') {
         const noteInput = this.Enotes[this.Einput]
         if (noteInput.includes('/')) {
           if (noteInput.split('/')[0] !== this.answer && noteInput.split('/')[1] !== this.answer) {
@@ -146,9 +146,9 @@ export default {
       }
       this.reset()
       this.answer = this.notes[Math.floor(Math.random() * (this.notes.length))]
-      var vf = new Vex.Flow.Factory({ renderer: { elementId: 'staff' } })
-      var score = vf.EasyScore()
-      var system = vf.System()
+      const vf = new Vex.Flow.Factory({ renderer: { elementId: 'staff' } })
+      const score = vf.EasyScore()
+      const system = vf.System()
       system.addStave({
         voices: [score.voice(score.notes(`${this.answer}4/w`))]
       }).addClef('treble').addTimeSignature('4/4')
@@ -160,16 +160,23 @@ export default {
       this.Ainput = null
       this.Einput = null
       const staff = document.getElementById('staff')
-      while (staff.hasChildNodes()) {
-        staff.removeChild(staff.lastChild)
+      if (staff) {
+        while (staff.hasChildNodes()) {
+          staff.removeChild(staff.lastChild)
+        }
       }
     },
     hardReset () {
       this.notes = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
       this.answer = ''
       this.correctAnswers = 0
-      this.reset()
-      this.nextNote()
+      const self = this
+      const checkExist = setInterval(function () {
+        if (document.getElementById('staff')) {
+          self.nextNote()
+          clearInterval(checkExist)
+        }
+      }, 100)
     }
   }
 }
