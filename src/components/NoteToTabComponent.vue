@@ -8,11 +8,7 @@
       </div>
     </div>
   </div>
-  <div class="w-100 h-100 d-flex justify-content-around align-items-center" v-if="studyMethod == 'Tab to Note'">
-    <div class="card">test</div>
-    <div class="card">test</div>
-  </div>
-  <div class="row mt-5" v-if="studyMethod == 'Note to Tab' && notes.length !== 0">
+  <div class="row mt-5" v-if="notes.length !== 0">
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
       <div class="d-flex justify-content-end shadow" id="staff"></div>
     </div>
@@ -54,10 +50,7 @@
 import Vex from 'vexflow'
 
 export default {
-  name: 'QuizComponent',
-  props: {
-    studyMethod: String
-  },
+  name: 'NoteToTabComponent',
   mounted () {
     this.nextNote()
   },

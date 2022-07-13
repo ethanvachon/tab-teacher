@@ -7,18 +7,21 @@
       </select>
   </nav>
   <div class="container height">
-    <QuizComponent :studyMethod="studyMethod"/>
+    <NoteToTabComponent v-if="studyMethod == 'Note to Tab'" />
+    <TabToNoteComponent v-if="studyMethod == 'Tab to Note'" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import QuizComponent from '@/components/QuizComponent.vue'
+import NoteToTabComponent from '@/components/NoteToTabComponent.vue'
+import TabToNoteComponent from '@/components/TabToNoteComponent.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    QuizComponent
+    NoteToTabComponent,
+    TabToNoteComponent
   },
   data () {
     return {
