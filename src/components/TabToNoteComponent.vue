@@ -10,18 +10,18 @@
   </div>
   <div class="row mt-5" v-if="notes.length !== 0">
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-      <div class="card shadow p-2">
-        <div class="py-1">
-          <span>G |--{{}}--</span>
+      <div class="card shadow p-2" v-if="answers.length === 4">
+        <div class="py-1 d-flex">
+          <span>G |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Gtab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
-        <div class="py-1">
-          <span>D |--{{}}--</span>
+        <div class="py-1 d-flex">
+          <span>D |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Dtab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
-        <div class="py-1">
-          <span>A |--{{}}--</span>
+        <div class="py-1 d-flex">
+          <span>A |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Atab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
-        <div class="py-1">
-          <span>E |--{{}}--</span>
+        <div class="py-1 d-flex">
+          <span>E |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Etab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
         <div class="d-flex justify-content-center pt-2">
           <button class="btn-sm btn-success" @click="submitAnswer()">Submit</button>
@@ -70,7 +70,7 @@ export default {
       Enotes: ['E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D'],
       Etab: [],
       input: '',
-      answer: [],
+      answers: [],
 
       notes: ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'],
       correctAnswers: 0
@@ -83,27 +83,40 @@ export default {
     nextNote () {
       this.reset()
       for (let i = 1; i <= 4; i++) {
-        const tab = Math.floor(Math.random() * (this.notes.length))
+        const tab = Math.floor((Math.random() * 4) + 1)
+        let index
         switch (tab) {
           case 1:
-            const index = Math.floor(Math.random() * (this.Gnotes.length))
-            this.Gtab.push(index)
-            this.answer.push(this.Gnotes[index])
+            index = Math.floor(Math.random() * (this.Gnotes.length))
+            this.answers.push({
+              note: this.Gnotes[index],
+              index: index,
+              string: 'Gtab'
+            })
             break
           case 2:
-            const index = Math.floor(Math.random() * (this.Dnotes.length))
-            this.Dtab.push(index)
-            this.answer.push(this.Dnotes[index])
+            index = Math.floor(Math.random() * (this.Dnotes.length))
+            this.answers.push({
+              note: this.Dnotes[index],
+              index: index,
+              string: 'Dtab'
+            })
             break
           case 3:
-            const index = Math.floor(Math.random() * (this.Anotes.length))
-            this.Atab.push(index)
-            this.answer.push(this.Anotes[index])
+            index = Math.floor(Math.random() * (this.Anotes.length))
+            this.answers.push({
+              note: this.Anotes[index],
+              index: index,
+              string: 'Atab'
+            })
             break
           case 4:
-            const index = Math.floor(Math.random() * (this.Enotes.length))
-            this.Etab.push(index)
-            this.answer.push(this.Enotes[index])
+            index = Math.floor(Math.random() * (this.Enotes.length))
+            this.answers.push({
+              note: this.Enotes[index],
+              index: index,
+              string: 'Etab'
+            })
             break
         }
       }
