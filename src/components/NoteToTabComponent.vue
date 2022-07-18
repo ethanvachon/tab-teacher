@@ -10,7 +10,7 @@
   </div>
   <div class="row mt-5" v-if="notes.length !== 0">
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-      <div class="d-flex justify-content-end shadow" id="staff"></div>
+      <div class="d-flex justify-content-end shadow mb-2" id="staff"></div>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
       <div class="card shadow p-2">

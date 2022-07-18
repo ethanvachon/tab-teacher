@@ -10,7 +10,7 @@
   </div>
   <div class="row mt-5" v-if="answered !== 10">
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-      <div class="card shadow p-1" v-if="answers.length === 4">
+      <div class="card shadow p-1 mb-2" v-if="answers.length === 4">
         <div class="py-1 d-flex">
           <span>G |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Gtab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
