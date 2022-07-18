@@ -1,14 +1,14 @@
 <template>
-  <div class="row my-2" v-if="notes.length !== 0">
+  <div class="row my-2" v-if="answered !== 10">
     <div class="col-12 d-flex justify-content-center">
       <div class="card shadow py-2 px-4 mt-2">
         <h5 class="m-0">{{correctAnswers}}/10 Correct</h5>
-        <h5 class="m-0"><span v-if="(17 - notes.length) !== 0">{{Math.round((correctAnswers/10) * 100)}}</span><span v-else>--</span>%</h5>
+        <h5 class="m-0"><span v-if="answered !== 0">{{Math.round((correctAnswers/answered) * 100)}}</span><span v-else>--</span>%</h5>
         <button class="btn-sm btn-primary mt-2" @click="hardReset()">Reset</button>
       </div>
     </div>
   </div>
-  <div class="row mt-5" v-if="notes.length !== 0">
+  <div class="row mt-5" v-if="answered !== 10">
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
       <div class="card shadow p-1" v-if="answers.length === 4">
         <div class="py-1 d-flex">
@@ -30,7 +30,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
       <div class="card shadow p-2">
-        <div class="py-1" v-if="input != null">
+        <div class="py-1">
           <input type="text" class="input-width mx-1" v-model="input[0]">
           <input type="text" class="input-width mx-1" v-model="input[1]">
           <input type="text" class="input-width mx-1" v-model="input[2]">
@@ -42,14 +42,14 @@
       </div>
     </div>
   </div>
-  <div class="row" v-if="notes.length === 0">
+  <div class="row" v-if="answered === 10">
     <div class="col-12 d-flex justify-content-center">
       <div class="card shadow p-2 mt-3">
-        <h4 v-if="correctAnswers == 17">Perfect! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
-        <h4 v-if="correctAnswers >= 14 && correctAnswers != 17">Congrats! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
-        <h4 v-if="correctAnswers >= 9 && correctAnswers < 14">Not bad! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
-        <h4 v-if="correctAnswers < 9">Try again! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
-        <h5 class="m-0">{{correctAnswers}}/17 Correct</h5>
+        <h4 v-if="correctAnswers == 10">Perfect! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
+        <h4 v-if="correctAnswers >= 8 && correctAnswers != 10">Congrats! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
+        <h4 v-if="correctAnswers >= 5 && correctAnswers < 7">Not bad! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
+        <h4 v-if="correctAnswers < 5">Try again! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
+        <h5 class="m-0">{{correctAnswers}}/10 Correct</h5>
         <button class="btn-sm btn-primary mt-3" @click="hardReset()">Reset</button>
       </div>
     </div>
@@ -74,6 +74,7 @@ export default {
       Etab: [],
       input: ['', '', '', ''],
       answers: [],
+      answered: 0,
 
       notes: ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'],
       correctAnswers: 0
@@ -81,15 +82,16 @@ export default {
   },
   methods: {
     submitAnswer () {
+      this.answered++
+      let correct = true
       for (let i = 0; i < this.input.length; i++) {
-        console.log(this.input[i])
         const answer = this[this.answers[i].string[0] + 'notes'][this.answers[i].index]
-        if (this.input[i] === answer.split('/')[0] || this.input[i] === answer.split('/')[1]) {
-          console.log('correct')
-          this.correctAnswers++
-        } else {
-          console.log('incorrect')
+        if (this.input[i] !== answer.split('/')[0] && this.input[i] !== answer.split('/')[1]) {
+          correct = false
         }
+      }
+      if (correct === true) {
+        this.correctAnswers++
       }
       this.nextNote()
     },
@@ -143,6 +145,7 @@ export default {
       this.input = ['', '', '', '']
     },
     hardReset () {
+      this.answered = 0
       this.nextNote()
     }
   }
