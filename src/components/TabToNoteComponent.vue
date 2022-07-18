@@ -2,15 +2,15 @@
   <div class="row my-2" v-if="notes.length !== 0">
     <div class="col-12 d-flex justify-content-center">
       <div class="card shadow py-2 px-4 mt-2">
-        <h5 class="m-0">{{correctAnswers}}/17 Correct</h5>
-        <h5 class="m-0"><span v-if="(17 - notes.length) !== 0">{{Math.round((correctAnswers/(17 - notes.length)) * 100)}}</span><span v-else>--</span>%</h5>
+        <h5 class="m-0">{{correctAnswers}}/10 Correct</h5>
+        <h5 class="m-0"><span v-if="(17 - notes.length) !== 0">{{Math.round((correctAnswers/10) * 100)}}</span><span v-else>--</span>%</h5>
         <button class="btn-sm btn-primary mt-2" @click="hardReset()">Reset</button>
       </div>
     </div>
   </div>
   <div class="row mt-5" v-if="notes.length !== 0">
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-      <div class="card shadow p-2" v-if="answers.length === 4">
+      <div class="card shadow p-1" v-if="answers.length === 4">
         <div class="py-1 d-flex">
           <span>G |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Gtab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
@@ -30,8 +30,11 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
       <div class="card shadow p-2">
-        <div class="py-1">
-          <input type="number" class="w-25" v-model="input">
+        <div class="py-1" v-if="input != null">
+          <input type="text" class="input-width mx-1" v-model="input[0]">
+          <input type="text" class="input-width mx-1" v-model="input[1]">
+          <input type="text" class="input-width mx-1" v-model="input[2]">
+          <input type="text" class="input-width mx-1" v-model="input[3]">
         </div>
         <div class="d-flex justify-content-center pt-2">
           <button class="btn-sm btn-success" @click="submitAnswer()">Submit</button>
@@ -69,7 +72,7 @@ export default {
       Atab: [],
       Enotes: ['E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D'],
       Etab: [],
-      input: '',
+      input: ['', '', '', ''],
       answers: [],
 
       notes: ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'],
@@ -78,7 +81,17 @@ export default {
   },
   methods: {
     submitAnswer () {
-      console.log('checking answer')
+      for (let i = 0; i < this.input.length; i++) {
+        console.log(this.input[i])
+        const answer = this[this.answers[i].string[0] + 'notes'][this.answers[i].index]
+        if (this.input[i] === answer.split('/')[0] || this.input[i] === answer.split('/')[1]) {
+          console.log('correct')
+          this.correctAnswers++
+        } else {
+          console.log('incorrect')
+        }
+      }
+      this.nextNote()
     },
     nextNote () {
       this.reset()
@@ -126,10 +139,11 @@ export default {
       this.Dtab = []
       this.Atab = []
       this.Etab = []
-      this.input = null
+      this.answers = []
+      this.input = ['', '', '', '']
     },
     hardReset () {
-      console.log('hard resetting?')
+      this.nextNote()
     }
   }
 }
@@ -138,5 +152,9 @@ export default {
 <style scoped>
 #staff {
   width: 8em;
+}
+
+.input-width {
+  width: 4em;
 }
 </style>
