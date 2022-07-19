@@ -13,7 +13,7 @@
       <div class="d-flex justify-content-end shadow mb-2" id="staff"></div>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-      <div class="card shadow p-2">
+      <div class="card shadow p-2 mb-2">
         <div class="py-1">
           <span>G |--<input type="number" class="w-25" v-model="Ginput">--</span>
         </div>
@@ -34,7 +34,7 @@
   </div>
   <div class="row" v-if="notes.length === 0">
     <div class="col-12 d-flex justify-content-center">
-      <div class="card shadow p-2 mt-3">
+      <div class="card shadow p-2 my-3">
         <h4 v-if="correctAnswers == 17">Perfect! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
         <h4 v-if="correctAnswers >= 14 && correctAnswers != 17">Congrats! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>
         <h4 v-if="correctAnswers >= 9 && correctAnswers < 14">Not bad! You scored a {{Math.round((correctAnswers/(17 - notes.length)) * 100)}}%</h4>

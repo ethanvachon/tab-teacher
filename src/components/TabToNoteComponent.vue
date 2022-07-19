@@ -23,13 +23,10 @@
         <div class="py-1 d-flex">
           <span>E |---<span :key="index" v-for="(note, index) in answers"><span v-if="note.string == 'Etab'">{{note.index}}</span><span v-else>--</span>---</span></span>
         </div>
-        <div class="d-flex justify-content-center pt-2">
-          <button class="btn-sm btn-success" @click="submitAnswer()">Submit</button>
-        </div>
       </div>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-      <div class="card shadow p-2">
+      <div class="card shadow p-2 mb-2">
         <div class="py-1">
           <input type="text" class="input-width mx-1" v-model="input[0]">
           <input type="text" class="input-width mx-1" v-model="input[1]">
@@ -44,7 +41,7 @@
   </div>
   <div class="row" v-if="answered === 10">
     <div class="col-12 d-flex justify-content-center">
-      <div class="card shadow p-2 mt-3">
+      <div class="card shadow p-2 my-3">
         <h4 v-if="correctAnswers == 10">Perfect! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
         <h4 v-if="correctAnswers >= 8 && correctAnswers != 10">Congrats! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
         <h4 v-if="correctAnswers >= 5 && correctAnswers < 7">Not bad! You scored a {{Math.round((correctAnswers/10) * 100)}}%</h4>
