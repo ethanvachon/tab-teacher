@@ -4,11 +4,13 @@
       <select class="rounded p-1" v-model="studyMethod">
         <option value="Note to Tab">Note to Tab</option>
         <option value="Tab to Note">Tab to Note</option>
+        <option value="Progression Picker">Progression Picker</option>
       </select>
   </nav>
   <div class="container height">
     <NoteToTabComponent v-if="studyMethod == 'Note to Tab'" />
     <TabToNoteComponent v-if="studyMethod == 'Tab to Note'" />
+    <ProgressionPickerComponent v-if="studyMethod == 'Progression Picker'" />
   </div>
 </template>
 
@@ -16,12 +18,14 @@
 // @ is an alias to /src
 import NoteToTabComponent from '@/components/NoteToTabComponent.vue'
 import TabToNoteComponent from '@/components/TabToNoteComponent.vue'
+import ProgressionPickerComponent from '@/components/ProgressionPickerComponent.vue'
 
 export default {
   name: 'HomeView',
   components: {
     NoteToTabComponent,
-    TabToNoteComponent
+    TabToNoteComponent,
+    ProgressionPickerComponent
   },
   data () {
     return {
