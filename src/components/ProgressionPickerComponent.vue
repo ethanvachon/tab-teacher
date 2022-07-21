@@ -1,15 +1,15 @@
 <template>
   <div class="row my-2">
     <div class="col-12 d-flex justify-content-center">
-      <div class="card shadow mt-2">
-        <div class="d-flex border-bottom p-2" v-if="randomProgression">
+      <div class="card shadow mt-2" v-if="randomProgression">
+        <div class="d-flex border-bottom p-2">
           <h5 class="m-0">{{randomScale[0]}} {{randomMode}}</h5>
         </div>
         <div class="d-flex justify-content-around p-2">
-          <div v-if="randomProgression">
-            <p :key="index" v-for="(note, index) in randomProgression">{{toNumeral(note)}}</p>
+          <div :key="index" v-for="(note, index) in randomProgression">
+            <p class="fw-bold">{{toNumeral(note)}}</p>
+            <p class="m-0 px-2">{{randomScale[note - 1]}}</p>
           </div>
-          <div id="staff"></div>
         </div>
         <div class="d-flex justify-content-center py-2 border-top">
           <button class="btn-sm btn-primary" @click="generateScale()">Generate</button>
