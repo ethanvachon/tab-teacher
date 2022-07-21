@@ -6,7 +6,10 @@
           <h5 class="m-0">{{randomScale[0]}} {{randomMode}}</h5>
         </div>
         <div class="d-flex justify-content-around p-2">
-          <p class="m-0 px-2" :key="index" v-for="(note, index) in randomProgression">{{randomScale[note - 1]}}</p>
+          <div :key="index" v-for="(note, index) in randomProgression">
+            <p>{{toNumeral(note)}}</p>
+            <p class="m-0 px-2">{{randomScale[note - 1]}}</p>
+          </div>
         </div>
         <div class="d-flex justify-content-center py-2 border-top">
           <button class="btn-sm btn-primary" @click="generateScale()">Generate</button>
@@ -27,9 +30,16 @@ export default {
     return {
       notes: ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B', 'C'],
       tonics: ['C', 'Db', 'D', 'Eb', 'E', 'F', 'G', 'Ab', 'A', 'Bb', 'B'],
-      // tonics: ['Db'],
+      numerals: [
+        ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'],
+        ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII'],
+        ['i', 'ii°', 'III+', 'iv', 'V', 'VI', 'vii°']
+      ],
       progressions: [
-        [1, 5, 4, 6]
+        [1, 5, 4, 6],
+        [1, 4, 5],
+        [1, 4, 6, 5],
+        [6, 4, 1, 5]
       ],
 
       randomMode: null,
@@ -55,9 +65,17 @@ export default {
             toPush = toPush.split('/')[0]
           }
         }
+        if (toPush[0] === scale[scale.length - 1][0]) {
+          let newNote = `${this.notes[this.notes.indexOf(toPush) + 1]}b`
+          if (newNote.includes('/')) {
+            newNote = newNote.split('/')[1]
+          }
+          toPush = newNote
+        }
         scale.push(toPush)
       }
       this.randomScale = scale
+      this.generateProgression()
     },
     generateMode () {
       const rand = Math.floor(Math.random() * 3)
@@ -77,6 +95,15 @@ export default {
     },
     generateProgression () {
       this.randomProgression = this.progressions[Math.floor(Math.random() * this.progressions.length)]
+    },
+    toNumeral (index) {
+      if (this.randomMode === 'Major') {
+        return this.numerals[0][index - 1]
+      } else if (this.randomMode === 'Minor') {
+        return this.numerals[1][index - 1]
+      } else if (this.randomMode === 'Harmonic Minor') {
+        return this.numerals[2][index - 1]
+      }
     }
   }
 }
