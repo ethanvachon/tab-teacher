@@ -144,7 +144,7 @@ export default {
       const system = vf.System()
       system.addStave({
         voices: [score.voice(score.notes(`${this.answer}4/w`))]
-      }).addClef('treble').addTimeSignature('4/4')
+      }).addClef('bass').addTimeSignature('4/4')
       vf.draw()
     },
     reset () {

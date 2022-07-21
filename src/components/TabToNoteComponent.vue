@@ -83,7 +83,7 @@ export default {
       let correct = true
       for (let i = 0; i < this.input.length; i++) {
         const answer = this[this.answers[i].string[0] + 'notes'][this.answers[i].index]
-        if (this.input[i] !== answer.split('/')[0] && this.input[i] !== answer.split('/')[1]) {
+        if (this.input[i].toLowerCase() !== answer.split('/')[0].toLowerCase() && this.input[i].toLowerCase() !== answer.split('/')[1].toLowerCase()) {
           correct = false
         }
       }

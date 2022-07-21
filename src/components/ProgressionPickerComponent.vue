@@ -1,15 +1,15 @@
 <template>
   <div class="row my-2">
     <div class="col-12 d-flex justify-content-center">
-      <div class="card shadow mt-2" v-if="randomProgression">
-        <div class="d-flex border-bottom p-2">
+      <div class="card shadow mt-2">
+        <div class="d-flex border-bottom p-2" v-if="randomProgression">
           <h5 class="m-0">{{randomScale[0]}} {{randomMode}}</h5>
         </div>
         <div class="d-flex justify-content-around p-2">
-          <div :key="index" v-for="(note, index) in randomProgression">
-            <p>{{toNumeral(note)}}</p>
-            <p class="m-0 px-2">{{randomScale[note - 1]}}</p>
+          <div v-if="randomProgression">
+            <p :key="index" v-for="(note, index) in randomProgression">{{toNumeral(note)}}</p>
           </div>
+          <div id="staff"></div>
         </div>
         <div class="d-flex justify-content-center py-2 border-top">
           <button class="btn-sm btn-primary" @click="generateScale()">Generate</button>
@@ -20,11 +20,11 @@
 </template>
 
 <script>
+import Vex from 'vexflow'
 export default {
   name: 'ProgressionPickerComponent',
   mounted () {
     this.generateScale()
-    this.generateProgression()
   },
   data () {
     return {
@@ -39,7 +39,8 @@ export default {
         [1, 5, 4, 6],
         [1, 4, 5],
         [1, 4, 6, 5],
-        [6, 4, 1, 5]
+        [6, 4, 1, 5],
+        [3, 5, 1]
       ],
 
       randomMode: null,
@@ -49,6 +50,7 @@ export default {
   },
   methods: {
     generateScale () {
+      this.resetStaff()
       const mode = this.generateMode()
       const tonic = this.tonics[Math.floor(Math.random() * this.tonics.length)]
       const scale = [tonic]
@@ -76,6 +78,7 @@ export default {
       }
       this.randomScale = scale
       this.generateProgression()
+      // this.drawStaff()
     },
     generateMode () {
       const rand = Math.floor(Math.random() * 3)
@@ -103,6 +106,27 @@ export default {
         return this.numerals[1][index - 1]
       } else if (this.randomMode === 'Harmonic Minor') {
         return this.numerals[2][index - 1]
+      }
+    },
+    drawStaff () {
+      const notes = []
+      this.randomProgression.forEach(p => {
+        notes.push(`${this.randomScale[p - 1]}4/q`)
+      })
+      const vf = new Vex.Flow.Factory({ renderer: { elementId: 'staff' } })
+      const score = vf.EasyScore()
+      const system = vf.System()
+      system.addStave({
+        voices: [score.voice(score.notes(notes.join(', ')))]
+      }).addClef('treble').addTimeSignature('4/4')
+      vf.draw()
+    },
+    resetStaff () {
+      const staff = document.getElementById('staff')
+      if (staff) {
+        while (staff.hasChildNodes()) {
+          staff.removeChild(staff.lastChild)
+        }
       }
     }
   }
